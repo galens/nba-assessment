@@ -80,36 +80,36 @@ export async function collateData() {
 
     const playerMapData = new Map();
     for (const player of players) {
-    const draftRound = player.draft_round;
-    const team = player.team.full_name;
+        const draftRound = player.draft_round;
+        const team = player.team.full_name;
 
-    // we have this team saved already
-    if (playerMapData.has(team)) {
-        let draftRoundText = 'null';
-        const currentData = playerMapData.get(team);
-        if (draftRound === 1) {
-            currentData[1] = currentData[1] + 1;
-        } else if (draftRound === 2) {
-            currentData[2] = currentData[2] + 1;
-        } else {
-            currentData['null'] = currentData['null'] + 1;
+        // we have this team saved already
+        if (playerMapData.has(team)) {
+            let draftRoundText = 'null';
+            const currentData = playerMapData.get(team);
+            if (draftRound === 1) {
+                currentData[1] = currentData[1] + 1;
+            } else if (draftRound === 2) {
+                currentData[2] = currentData[2] + 1;
+            } else {
+                currentData['null'] = currentData['null'] + 1;
+            }
+            playerMapData.set(team, currentData);
+        } else { // first time seeing this team
+            let draftRoundText = 'null';
+            let data = {};
+            if (draftRound === 1) {
+                draftRoundText = '1';
+                data = { '1': 1, '2': 0, 'null': 0 }
+            } else if (draftRound === 2) {
+                draftRoundText = '2';
+                data = { '1': 0, '2': 1, 'null': 0 }
+            } else {
+                draftRoundText = 'null';
+                data = { '1': 0, '2': 0, 'null': 1 }
+            }
+            playerMapData.set(team, data);
         }
-        playerMapData.set(team, currentData);
-    } else { // first time seeing this team
-        let draftRoundText = 'null';
-        let data = {};
-        if (draftRound === 1) {
-            draftRoundText = '1';
-            data = { '1': 1, '2': 0, 'null': 0 }
-        } else if (draftRound === 2) {
-            draftRoundText = '2';
-            data = { '1': 0, '2': 1, 'null': 0 }
-        } else {
-            draftRoundText = 'null';
-            data = { '1': 0, '2': 0, 'null': 1 }
-        }
-        playerMapData.set(team, data);
-    }
     }
     return playerMapData;
 }
